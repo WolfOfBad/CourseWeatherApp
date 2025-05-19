@@ -6,8 +6,11 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -25,9 +28,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.coursework.dto.CurrentWeather
+import com.example.coursework.dto.WeatherResponse
 import com.example.coursework.ui.screens.WeatherViewModel
 import com.example.coursework.ui.theme.CourseworkTheme
 import com.google.gson.GsonBuilder
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 
 class MainActivity : ComponentActivity() {
 
@@ -57,9 +64,6 @@ fun WeatherApp(viewModel: WeatherViewModel) {
 
     var cityName by remember { mutableStateOf("Izhevsk") }
     var textFieldValue by remember { mutableStateOf(TextFieldValue(cityName)) }
-
-    val gson = remember { GsonBuilder().setPrettyPrinting().create() }
-    val json = gson.toJson(weather)
 
     Scaffold(
         topBar = {
@@ -109,14 +113,73 @@ fun WeatherApp(viewModel: WeatherViewModel) {
                         color = Color.Red,
                         fontSize = 16.sp
                     )
-                    weather != null -> Text(
-                        text = json,
-                        fontSize = 12.sp,
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
+                    weather != null -> {
+                        WeatherCurrentCard(
+                            current = weather!!.current
+                        )
+                    }
                     else -> Text("Введите город и нажмите Поиск", fontSize = 16.sp)
                 }
             }
         }
     )
+}
+
+
+@Composable
+fun WeatherCurrentCard(
+    current: CurrentWeather // твой класс с current полями
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            horizontalAlignment = Alignment.Start
+        ) {
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = "${current.temperature_2m}°C",
+                style = MaterialTheme.typography.displaySmall
+            )
+            Text(
+                text = "Ощущается как ${current.apparent_temperature}°C",
+                style = MaterialTheme.typography.bodyMedium
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("Влажность: ${current.relative_humidity_2m} %", fontSize = 14.sp)
+                Text("Давление: ${current.pressure_msl} hPa", fontSize = 14.sp)
+            }
+
+            Text("Облачность: ${current.cloud_cover} %", fontSize = 14.sp)
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text("Ветер:", style = MaterialTheme.typography.titleMedium)
+            Spacer(modifier = Modifier.height(4.dp))
+            Text("Скорость: ${current.wind_speed_10m} км/ч", fontSize = 14.sp)
+            Text("Направление: ${current.wind_direction_10m}°", fontSize = 14.sp)
+            Text("Порывы: ${current.wind_gusts_10m} км/ч", fontSize = 14.sp)
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text("Осадки:", style = MaterialTheme.typography.titleMedium)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text("Дождь: ${current.rain} мм", fontSize = 14.sp)
+                Text("Снег: ${current.snowfall} см", fontSize = 14.sp)
+                Text("Ливни: ${current.showers} мм", fontSize = 14.sp)
+            }
+        }
+    }
 }
