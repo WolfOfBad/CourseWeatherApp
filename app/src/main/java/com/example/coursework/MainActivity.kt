@@ -83,8 +83,8 @@ fun WeatherApp(viewModel: WeatherViewModel) {
                 placeholder = { Text("Введите город") },
                 singleLine = true,
                 colors = TextFieldDefaults.textFieldColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant, // светлый фон
-                    focusedIndicatorColor = MaterialTheme.colorScheme.primary, // цвет нижней линии при фокусе
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    focusedIndicatorColor = MaterialTheme.colorScheme.primary,
                     unfocusedIndicatorColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f), // цвет нижней линии без фокуса
                     cursorColor = MaterialTheme.colorScheme.primary
                 ),
@@ -94,11 +94,11 @@ fun WeatherApp(viewModel: WeatherViewModel) {
                     .border(
                         width = 1.dp,
                         color = MaterialTheme.colorScheme.primary,
-                        shape = RoundedCornerShape(8.dp)
+                        shape = RoundedCornerShape(16.dp)
                     )
                     .background(
                         color = MaterialTheme.colorScheme.surfaceVariant,
-                        shape = RoundedCornerShape(8.dp)
+                        shape = RoundedCornerShape(16.dp)
                     )
                     .padding(horizontal = 8.dp)
             )
@@ -141,13 +141,13 @@ fun WeatherApp(viewModel: WeatherViewModel) {
 
 @Composable
 fun WeatherCurrentCard(
-    current: CurrentWeather // твой класс с current полями
+    current: CurrentWeather
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(30.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
         Column(
@@ -164,10 +164,12 @@ fun WeatherCurrentCard(
                 Text(
                     text = "${current.temperature_2m}°C",
                     style = MaterialTheme.typography.displaySmall,
+                    fontSize = 50.sp,
                 )
                 Text(
                     text = "Ощущается как ${current.apparent_temperature}°C",
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontSize = 20.sp
                 )
             }
 
@@ -180,26 +182,22 @@ fun WeatherCurrentCard(
                 Text("Давление: ${current.pressure_msl} hPa", fontSize = 14.sp)
             }
 
-            Text("Облачность: ${current.cloud_cover} %", fontSize = 14.sp)
+            Row(
+                modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text("Облачность: ${current.cloud_cover} %", fontSize = 14.sp)
+                Text("Осадки: ${current.precipitation} мм", fontSize = 14.sp)
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text("Ветер:", style = MaterialTheme.typography.titleMedium)
+            Text("Ветер:", style = MaterialTheme.typography.titleMedium, fontSize = 18.sp)
             Spacer(modifier = Modifier.height(4.dp))
             Text("Скорость: ${current.wind_speed_10m} км/ч", fontSize = 14.sp)
             Text("Направление: ${current.wind_direction_10m}°", fontSize = 14.sp)
             Text("Порывы: ${current.wind_gusts_10m} км/ч", fontSize = 14.sp)
 
             Spacer(modifier = Modifier.height(16.dp))
-
-            Text("Осадки:", style = MaterialTheme.typography.titleMedium)
-            Row(
-                modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text("Дождь: ${current.rain} мм", fontSize = 14.sp)
-                Text("Снег: ${current.snowfall} см", fontSize = 14.sp)
-                Text("Ливни: ${current.showers} мм", fontSize = 14.sp)
-            }
         }
     }
 }
