@@ -1,4 +1,4 @@
-package com.example.coursework.ui.screens
+package com.example.coursework.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -49,4 +49,3 @@ class WeatherViewModel : ViewModel() {
         }
     }
 }
-
