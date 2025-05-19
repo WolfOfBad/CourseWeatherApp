@@ -2,9 +2,9 @@ package com.example.coursework.ui.screens
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.coursework.dto.WeatherResponse
-import com.example.coursework.dto.CityResponse
 import com.example.coursework.api.RetrofitInstance
+import com.example.coursework.dto.CityResponse
+import com.example.coursework.dto.WeatherResponse
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -33,8 +33,7 @@ class WeatherViewModel : ViewModel() {
                 val firstCity = cityInfo.firstOrNull()
                 if (firstCity != null) {
                     val forecast = RetrofitInstance.weatherApi.getWeather(
-                        latitude = firstCity.latitude,
-                        longitude = firstCity.longitude
+                        latitude = firstCity.latitude, longitude = firstCity.longitude
                     )
                     _weather.value = forecast
                 } else {

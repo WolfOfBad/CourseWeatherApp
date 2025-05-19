@@ -1,9 +1,7 @@
 package com.example.coursework.dto
 
 data class WeatherResponse(
-    val latitude: Double,
-    val longitude: Double,
-    val current: CurrentWeather
+    val latitude: Double, val longitude: Double, val current: CurrentWeather
 )
 
 data class CurrentWeather(
